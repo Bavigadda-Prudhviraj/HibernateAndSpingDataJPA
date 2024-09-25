@@ -47,4 +47,38 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         return employeeRepo.findById(department.getManager().getId()).orElse(null);
     }
+
+    @Override
+    public Department assignWorkerToDepartment(Long departmentId, Long employeeId) {
+        Optional<Department> department = departmentRepo.findById(departmentId);
+        Optional<Employee> employee = employeeRepo.findById(employeeId);
+        return department.flatMap(department1 ->
+                employee.map(employee1 -> {
+                    employee1.setWorkerDepartment(department1);
+                    employeeRepo.save(employee1);
+                    department1.getWorkers().add(employee1);
+                    return  department1;
+                })).orElse(null);
+    }
+
+    /**
+     * @param departmentId
+     * @param employeeId
+     * @return
+     */
+    @Override
+    public Department assignFreelancersToDepartment(Long departmentId, Long employeeId) {
+        Optional<Department> department = departmentRepo.findById(departmentId);
+        Optional<Employee> employee = employeeRepo.findById(employeeId);
+        return department.flatMap(department1 ->
+                employee.map(employee1 -> {
+
+                   employee1.getFreelancerDepartment().add(department1);
+                   employeeRepo.save(employee1);
+                    department1.getFreelancers().add(employee1);
+                    return department1;
+                })).orElse(null);
+    }
+
+
 }

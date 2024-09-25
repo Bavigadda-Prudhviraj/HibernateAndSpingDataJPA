@@ -10,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -26,8 +28,27 @@ public class Department {
     @JoinColumn(name = "department_manager")
     @JsonIgnore
     private Employee manager;
+
+    @OneToMany(mappedBy = "workerDepartment")
+    private Set<Employee> workers;
+    @ManyToMany(mappedBy = "freelancerDepartment")
+    private Set<Employee> freelancers;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Department that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title);
+    }
 }

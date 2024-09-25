@@ -10,4 +10,6 @@ public interface DepartmentService {
     public Department getDepartmentById(Long id);
     public Department assignManagerToDepartment(Long departmentId, Long employeeId);
     public Employee getDepartmentManagerByDepartmentId(Long  departmentId);
+    public Department assignWorkerToDepartment(Long departmentId, Long employeeId);
+    public Department assignFreelancersToDepartment(Long departmentId, Long employeeId);
 }
